@@ -1285,12 +1285,12 @@ class FlowClient:
                     status = result_json.get('status')
                     if status == 'ready':
                         solution = result_json.get('solution', {})
-                        response = solution.get('gRecaptchaResponse')
+                        response = solution.get('gRecaptchaResponse') or solution.get('token')
                         if response:
                             debug_logger.log_info(f"[reCAPTCHA {method}] Token获取成功")
                             return response
 
-                    time.sleep(3)
+                    await asyncio.sleep(3)
 
                 debug_logger.log_error(f"[reCAPTCHA {method}] Timeout waiting for token")
                 return None
