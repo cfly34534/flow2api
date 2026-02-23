@@ -36,7 +36,7 @@ class _FakeSession:
 
 
 class ThirdPartyCaptchaTests(unittest.IsolatedAsyncioTestCase):
-    async def test_yescaptcha_accepts_token_field_without_blocking_sleep(self):
+    async def test_yescaptcha_token_extraction_with_async_polling(self):
         client = FlowClient(_DummyProxyManager())
         config.set_yescaptcha_api_key("dummy")
         config.set_yescaptcha_base_url("https://api.yescaptcha.com")
@@ -48,10 +48,11 @@ class ThirdPartyCaptchaTests(unittest.IsolatedAsyncioTestCase):
         ]
 
         with patch("src.services.flow_client.AsyncSession", return_value=_FakeSession(fake_responses)):
-            with patch("src.services.flow_client.time.sleep", side_effect=AssertionError("time.sleep should not be called")):
+            with patch("src.services.flow_client.asyncio.sleep") as mock_sleep:
                 token = await client._get_api_captcha_token("yescaptcha", "project-id")
 
         self.assertEqual(token, "captcha-token")
+        mock_sleep.assert_awaited_once_with(3)
 
 
 if __name__ == "__main__":
