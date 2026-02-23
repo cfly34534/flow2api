@@ -1121,8 +1121,6 @@ class FlowClient:
         error_lower = error_str.lower()
         if "403" in error_lower:
             return "403错误"
-        if "public_error_something_went_wrong" in error_lower:
-            return "服务端临时错误"
         if "recaptcha evaluation failed" in error_lower:
             return "reCAPTCHA 验证失败"
         if "recaptcha" in error_lower:
@@ -1258,7 +1256,8 @@ class FlowClient:
                         "websiteURL": website_url,
                         "websiteKey": website_key,
                         "type": task_type,
-                        "pageAction": page_action
+                        "pageAction": page_action,
+                        "isEnterprise": True
                     }
                 }
 
