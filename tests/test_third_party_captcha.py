@@ -54,6 +54,11 @@ class ThirdPartyCaptchaTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(token, "captcha-token")
         mock_sleep.assert_awaited_once_with(3)
 
+    async def test_retry_reason_detects_public_error_something_went_wrong(self):
+        client = FlowClient(_DummyProxyManager())
+        reason = client._get_retry_reason("Flow API request failed: PUBLIC_ERROR_SOMETHING_WENT_WRONG")
+        self.assertEqual(reason, "服务端临时错误")
+
 
 if __name__ == "__main__":
     unittest.main()
