@@ -1256,7 +1256,8 @@ class FlowClient:
                         "websiteURL": website_url,
                         "websiteKey": website_key,
                         "type": task_type,
-                        "pageAction": page_action
+                        "pageAction": page_action,
+                        "isEnterprise": True
                     }
                 }
 
